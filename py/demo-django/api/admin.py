@@ -2,6 +2,8 @@ from django.contrib import admin
 
 from .models import Profile
 from .models import Note
+from .models import ExampleCSVData
+
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
@@ -41,3 +43,20 @@ class NoteAdmin(admin.ModelAdmin):
         Override to include related profile data in the queryset.
         """
         return super().get_queryset(request).select_related('profile')
+
+
+@admin.register(ExampleCSVData)
+class ExampleCSVDataAdmin(admin.ModelAdmin):
+    """
+    Admin interface for the ExampleCSVData model.
+    """
+    list_display = ('col1', 'col2')
+    search_fields = ('col1',)
+    list_filter = ('col2',)
+    ordering = ('col1',)
+
+    def get_queryset(self, request):
+        """
+        Override to include any necessary optimizations or related data.
+        """
+        return super().get_queryset(request)

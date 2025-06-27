@@ -27,3 +27,11 @@ class Note(models.Model):
 
     def __str__(self):
         return f"Note: {self.title} by {self.profile.user.username}"
+
+
+class ExampleCSVData(models.Model):
+    """
+    Model representing an inported CSV file.
+    """
+    col1 = models.CharField(max_length=255, blank=True, null=True)
+    col2 = models.IntegerField(blank=True, null=True)
