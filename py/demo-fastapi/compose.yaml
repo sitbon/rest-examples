@@ -25,7 +25,8 @@ services:
       dockerfile: dockerfile
     command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
     volumes:
-      - .:/app
+      - ./app:/app/app
+      - ./foo_demo:/app/foo_demo
     ports:
       - "8000:8000"
     environment:

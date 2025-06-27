@@ -4,6 +4,7 @@
 !.github/
 !.python-version
 !.env.example
+!.dockerignore
 
 *.py[co]
 __pycache__/
@@ -11,3 +12,4 @@ __pycache__/
 play/
 local/
 CLAUDE.local*
+*.sqlite3
