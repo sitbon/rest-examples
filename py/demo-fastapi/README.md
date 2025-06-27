@@ -2,7 +2,7 @@
 
 ## Project: Foo Demo
 
-This is a demo FastAPI project using SQLAlchemy, asyncpg, Alembic, and pydantic-settings, with Docker Compose for local development. It provides a simple user CRUD API and is ready for interview live-coding.
+This is a demo FastAPI project using SQLAlchemy, asyncpg, Alembic, and pydantic-settings, with Docker Compose for local development. It provides a simple user CRUD and API.
 
 ### Features
 - FastAPI app with async SQLAlchemy and PostgreSQL

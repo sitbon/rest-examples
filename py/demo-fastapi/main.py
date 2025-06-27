@@ -6,7 +6,7 @@ settings = get_settings()
 
 app = FastAPI(
     title="Foo Demo",
-    description="A FastAPI + SQLAlchemy demo project for interview.",
+    description="A FastAPI + SQLAlchemy demo project.",
     version="0.1.0",
 )
 
