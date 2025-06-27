@@ -1,0 +1,75 @@
+name: foo-demo
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: foo-demo-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-foodemo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-foodemo123}
+      POSTGRES_DB: ${POSTGRES_DB:-foodemo}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - foo-demo-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-foodemo}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: dockerfile
+      target: production
+    container_name: foo-demo-app
+    restart: unless-stopped
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      DATABASE_URL: postgres://${POSTGRES_USER:-foodemo}:${POSTGRES_PASSWORD:-foodemo123}@postgres:5432/${POSTGRES_DB:-foodemo}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-your-secret-key-here}
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - foo-demo-network
+    volumes:
+      - ./uploads:/app/uploads
+
+  app-dev:
+    profiles: ["dev"]
+    build:
+      context: .
+      dockerfile: dockerfile
+      target: development
+    container_name: foo-demo-app-dev
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://${POSTGRES_USER:-foodemo}:${POSTGRES_PASSWORD:-foodemo123}@postgres:5432/${POSTGRES_DB:-foodemo}
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: dev-secret-key
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - foo-demo-network
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+
+volumes:
+  postgres-data:
+
+networks:
+  foo-demo-network:
+    driver: bridge
